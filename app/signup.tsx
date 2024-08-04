@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Alert, StyleSheet, View, AppState } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { Button, Input } from '@rneui/themed'
+import { styled } from 'nativewind'
+import { Link } from 'expo-router'
+import { Text } from 'react-native'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -14,6 +17,10 @@ AppState.addEventListener('change', (state) => {
     supabase.auth.stopAutoRefresh()
   }
 })
+
+const StyledView = styled(View);
+const StyledText = styled(Text);
+const StyledLink = styled(Link);
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -61,6 +68,15 @@ export default function Auth() {
       <View style={styles.verticallySpaced}>
         <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
       </View>
+      <StyledView className="flex flex-row gap-[2.5px] justify-end mt-1">
+        <StyledText className="">Already have an account?</StyledText>
+        <StyledLink
+          className="text-blue-600 underline font-semibold"
+          href="/signin"
+        >
+          Sign In
+        </StyledLink>
+      </StyledView>
     </View>
   )
 }

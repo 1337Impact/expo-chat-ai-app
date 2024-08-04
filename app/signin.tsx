@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, View, AppState } from "react-native";
+import { Alert, StyleSheet, View, AppState, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 import { Button, Input } from "@rneui/themed";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
+import { styled } from "nativewind";
 
-// Tells Supabase Auth to continuously refresh the session automatically if
-// the app is in the foreground. When this is added, you will continue to receive
-// `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
-// if the user's session is terminated. This should only be registered once.
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
     supabase.auth.startAutoRefresh();
@@ -15,6 +12,10 @@ AppState.addEventListener("change", (state) => {
     supabase.auth.stopAutoRefresh();
   }
 });
+
+const StyledView = styled(View);
+const StyledText = styled(Text);
+const StyledLink = styled(Link);
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -35,7 +36,7 @@ export default function Auth() {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced, styles.mt10]}>
         <Input
           label="Email"
           leftIcon={{ type: "font-awesome", name: "envelope" }}
@@ -56,13 +57,22 @@ export default function Auth() {
           autoCapitalize={"none"}
         />
       </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={[styles.verticallySpaced, styles.mt10]}>
         <Button
           title="Sign in"
           disabled={loading}
           onPress={() => signInWithEmail()}
         />
       </View>
+      <StyledView className="flex flex-row gap-[2.5px] justify-end mt-1">
+        <StyledText className="">Don't have an account?</StyledText>
+        <StyledLink
+          className="text-blue-600 underline font-semibold"
+          href="/signup"
+        >
+          Sign up
+        </StyledLink>
+      </StyledView>
     </View>
   );
 }
@@ -77,7 +87,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     alignSelf: "stretch",
   },
-  mt20: {
-    marginTop: 20,
+  mt10: {
+    marginTop: 10,
   },
 });
